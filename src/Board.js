@@ -132,43 +132,29 @@
     //
     // test if a specific major diagonal on this board contains a conflict
 
-    hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      var input = majorDiagonalColumnIndexAtFirstRow;
+    hasMajorDiagonalConflictAt: function(column, someRow) {
+      var col = column;
       var sum = 0;
-      for (var i = 0; i < this.attributes.n; i++) {
-        sum += this.attributes[i][input];
-        input++;
-        if (this.attributes.n === input) {
+      for (var row = someRow; row < this.attributes.n; row++) {
+        sum += this.attributes[row][col];
+        col++;
+        if (this.attributes.n === col) {
           break;
         }
       }
+
       return sum > 1;
     },
 
-    // hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-    //   //create sum variable that totals everything in the diagonal
-    //   var sum = 0;
-    //   //Loop through the rows
-    //   var col = majorDiagonalColumnIndexAtFirstRow;
-    //   var board = this.attributes;
-    //   var maxRow = board.n;
-    //   for (var row = 0; row < maxRow - col; row++) {
-    //     sum += board[row][row + col];
-    //     //Check if current column > size of board
-    //     if (row + col > maxRow) {
-    //       //If yes we stop
-    //       break;
-    //     }
-    //   }
-    //   //return sum > 1
-    //   return sum > 1; // fixme
-    // },
-
-    // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
       var hasConflict = false;
-      for (var i = 0; i < this.attributes.n; i++) {
-        hasConflict = this.hasMajorDiagonalConflictAt(i);
+      for (var col = 0; col < this.attributes.n; col++) {
+        for(var row = 0; row < this.attributes.n; row++) {
+          hasConflict = this.hasMajorDiagonalConflictAt(col, row);
+          if (hasConflict) {
+            break;
+          }
+        }
         if (hasConflict) {
           break;
         }
