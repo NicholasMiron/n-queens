@@ -146,10 +146,10 @@
       return sum > 1;
     },
 
-    hasAnyMajorDiagonalConflicts: function() {
+    hasAnyMajorDiagonalConflicts: function() { // come back and optimize to not check for partialsß
       var hasConflict = false;
       for (var col = 0; col < this.attributes.n; col++) {
-        for(var row = 0; row < this.attributes.n; row++) {
+        for (var row = 0; row < this.attributes.n; row++) {
           hasConflict = this.hasMajorDiagonalConflictAt(col, row);
           if (hasConflict) {
             break;
@@ -168,13 +168,34 @@
     // --------------------------------------------------------------
     //
     // test if a specific minor diagonal on this board contains a conflict
-    hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+    hasMinorDiagonalConflictAt: function(column, someRow) {
+      var col = column;
+      var sum = 0;
+      for (var row = someRow; row < this.attributes.n; row++) {
+        sum += this.attributes[row][col];
+        col--;
+        if (col < 0) {
+          break;
+        }
+      }
+      return sum > 1;
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      var hasConflict = false;
+      for (var col = 0; col < this.attributes.n; col++){
+        for (var row = 0; row < this.attributes.n; row++){
+          hasConflict = this.hasMinorDiagonalConflictAt(col, row);
+          if (hasConflict){
+            break;
+          }
+        }
+        if (hasConflict){
+          break;
+        }
+      }
+      return hasConflict; // fixme
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
