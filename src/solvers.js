@@ -16,11 +16,24 @@
 
 
 window.findNRooksSolution = function(n) {
-  var solution = new Board(createMatrix(n)); //fixme
-  console.log(solution);
-  console.log(solution.get(0));
-  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  return solution;
+  //Crete an empty board
+  var aSolution = new Board(createMatrix(n));
+  for (var row = 0; row < n; row++) {
+    for (var col = 0; col < n; col++) {
+      var aRow = aSolution.get(row);
+      aRow[col] = 1;
+      aSolution.set(row, aRow);
+      if (aSolution.hasAnyRowConflicts() || aSolution.hasAnyColConflicts()) {
+        aRow[col] = 0;
+        aSolution.set(row, aRow);
+      }
+    }
+  }
+  var output = [];
+  for (var i = 0; i < n; i++) {
+    output.push(aSolution.attributes[i]);
+  }
+  return output;
 };
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
@@ -49,10 +62,12 @@ window.countNQueensSolutions = function(n) {
 
 window.createMatrix = function(n) {
   let outer = [];
-  let inner = [];
-  outer.length = n;
-  inner.length = n;
-  inner.fill(0);
-  outer.fill(inner);
+  for (let i = 0; i < n; i++) {
+    var inner = [];
+    for (let i = 0; i < n; i++) {
+      inner.push(0);
+    }
+    outer.push(inner);
+  }
   return outer;
 };
