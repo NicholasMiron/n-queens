@@ -16,8 +16,9 @@
 
 
 window.findNRooksSolution = function(n) {
-  var solution = undefined; //fixme
-
+  var solution = new Board(createMatrix(n)); //fixme
+  console.log(solution);
+  console.log(solution.get(0));
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   return solution;
 };
@@ -44,4 +45,14 @@ window.countNQueensSolutions = function(n) {
 
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
+};
+
+window.createMatrix = function(n) {
+  let outer = [];
+  let inner = [];
+  outer.length = n;
+  inner.length = n;
+  inner.fill(0);
+  outer.fill(inner);
+  return outer;
 };
