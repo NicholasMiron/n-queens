@@ -16,13 +16,23 @@
 
 
 window.findNRooksSolution = function(n) {
-  var matrix = new Board(matrixGenerator(n));
+  var matrixNew = matrixGenerator(n);
+  console.log('matrixNew = ', matrixNew);
+  var matrix = new Board(matrixNew);
+  console.log('matrix =', matrix);
   for (var row = 0; row < n; row ++) {
+    var rowGet = matrix.get(row);
     for (var column = 0; column < n; column ++) {
-      matrix.attributes[row][column] = 1;
-      if (matrix.hasAnyRowConflicts() || matrix.hasAnyColConflicts()) {
-        matrix.attributes[row][column] = 0;
-      }
+      var goodMatrix = matrix;
+      rowGet[column] = 1;
+      console.log('rowGet = ', rowGet);
+      matrix.set(row,rowGet);
+      console.log('matrix after set = ', matrix);
+      // if (matrix.hasAnyRowConflicts() || matrix.hasAnyColConflicts()) {
+      //   // matrix = goodMatrix;
+      //   rowGet[column] = 0;
+      //   matrix.set(row, rowGet);
+      // }
     }
   }
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(matrix));
