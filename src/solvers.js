@@ -18,21 +18,30 @@
 window.findNRooksSolution = function(n) {
   //Crete an empty board
   var aSolution = new Board(createMatrix(n));
+  //Loop through all rows and cols
   for (var row = 0; row < n; row++) {
     for (var col = 0; col < n; col++) {
+      //get the current row
       var aRow = aSolution.get(row);
+      //Change the next value
       aRow[col] = 1;
+      //change the current row
       aSolution.set(row, aRow);
+      //Check for conflicts
       if (aSolution.hasAnyRowConflicts() || aSolution.hasAnyColConflicts()) {
+        //If so reset
         aRow[col] = 0;
         aSolution.set(row, aRow);
       }
     }
   }
+  //Need to return a matrix
   var output = [];
   for (var i = 0; i < n; i++) {
     output.push(aSolution.attributes[i]);
   }
+
+  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(output));
   return output;
 };
 
