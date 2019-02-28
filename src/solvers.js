@@ -58,37 +58,31 @@ window.countNRooksSolutions = function(n) {
 
   //Create array of all possible combinations of 0 - n
   var valsToN = new Array(n);
-  valsToN.forEach(function(element, index) {
-    element = index;
-  });
+  for (var i = 0; i < n; i++) {
+    valsToN[i] = i;
+  }
   var permutations = findAllPermutations(valsToN);
 
-  //Fill board with match from prefilled and 
-  for (var permute = 0; permute < permutations.length; permute++) {
-    //create a custom matrix of prestuffed sorted in the order of permutations permute
-    var customMatrix = [];
-    for (var permi = 0; permi < permute.length; permi++) {
-      customMatrix[0] = preStuffed[permutations[permute[permi]]];
-    }
+  //Go through all possiblities
+  permutations.forEach(function(permute, permutationsIndex) {
+    var customMatrix = []; //a custom made matrix
+    permute.forEach(function(permi, permuteIndex) {
+      //Reorder preStuffed based of permutation into customMatrix
+      var indexForPreStuffed = permute[permuteIndex];
+      customMatrix[permuteIndex] = preStuffed[indexForPreStuffed];
 
-    //Create new board
-    var customBoard = new Board(customMatrix);
-
-    if (!customBoard.hasAnyColConflicts() &&
-        !customBoard.hasAnyRowConflicts() &&
-        !customBoard.hasAnyMajorDiagonalConflicts() &&
-        !customBoard.hasAnyMinorDiagonalConflicts() ) {
-      var stringyCustom = JSON.stringify(customMatrix);
-      solutions.push(stringyCustom);
-    }
-
-  }
-
-
-
-
-  var solutionCount = solutions.length; //fixme
-
+      //If customMatrix full check for conflicts
+      if (customMatrix.length === n) {
+        var customBoard = new Board(customMatrix);
+        if (!customBoard.hasAnyColConflicts() &&
+        !customBoard.hasAnyRowConflicts()) {
+          var stringyCustom = JSON.stringify(customMatrix);
+          solutions.push(stringyCustom);
+        }
+      }
+    });
+  });
+  var solutionCount = solutions.length; 
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
 };
@@ -121,7 +115,44 @@ window.findNQueensSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  //Variable of all passed solutions
+  var solutions = [];
+
+  //Create prefilled matrix;
+  var preStuffed = createMatrix(n);
+  for (let i = 0; i < preStuffed.length; i++) {
+    preStuffed[i][i] = 1;
+  }
+
+  //Create array of all possible combinations of 0 - n
+  var valsToN = new Array(n);
+  for (var i = 0; i < n; i++) {
+    valsToN[i] = i;
+  }
+  var permutations = findAllPermutations(valsToN);
+
+  //Go through all possiblities
+  permutations.forEach(function(permute, permutationsIndex) {
+    var customMatrix = []; //a custom made matrix
+    permute.forEach(function(permi, permuteIndex) {
+      //Reorder preStuffed based of permutation into customMatrix
+      var indexForPreStuffed = permute[permuteIndex];
+      customMatrix[permuteIndex] = preStuffed[indexForPreStuffed];
+
+      //If customMatrix full check for conflicts
+      if (customMatrix.length === n) {
+        var customBoard = new Board(customMatrix);
+        if (!customBoard.hasAnyColConflicts() &&
+            !customBoard.hasAnyRowConflicts() &&
+            !customBoard.hasAnyMajorDiagonalConflicts() &&
+            !customBoard.hasAnyMinorDiagonalConflicts()) {
+          var stringyCustom = JSON.stringify(customMatrix);
+          solutions.push(stringyCustom);
+        }
+      }
+    });
+  });
+  var solutionCount = n === 0 ? 1 : solutions.length;
 
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
@@ -146,6 +177,8 @@ window.findAllPermutations = function(anArr = []) {
     array[pos2] = temp;
   };
   
+  var results = [];
+
   var heapsPermute = function (array, output, n) {
     n = n || array.length; // set n default to array.length
     if (n === 1) {
@@ -163,13 +196,12 @@ window.findAllPermutations = function(anArr = []) {
     }
   };
   
-  var output = [];
   
   // For testing:
   var print = function(input) {
-    output.push(input);
+    results.push(input.slice());
   };
   
   heapsPermute(anArr, print);
-  return output;
+  return results;
 };
