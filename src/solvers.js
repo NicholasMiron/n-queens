@@ -74,8 +74,7 @@ window.countNRooksSolutions = function(n) {
       //If customMatrix full check for conflicts
       if (customMatrix.length === n) {
         var customBoard = new Board(customMatrix);
-        if (!customBoard.hasAnyColConflicts() &&
-        !customBoard.hasAnyRowConflicts()) {
+        if (!customBoard.hasAnyRooksConflicts()) {
           var stringyCustom = JSON.stringify(customMatrix);
           solutions.push(stringyCustom);
         }
@@ -110,10 +109,7 @@ window.findNQueensSolution = function(n) {
 
       if (customMatrix.length === n) {
         var customBoard = new Board(customMatrix);
-        if (!customBoard.hasAnyColConflicts() &&
-            !customBoard.hasAnyRowConflicts() &&
-            !customBoard.hasAnyMajorDiagonalConflicts() &&
-            !customBoard.hasAnyMinorDiagonalConflicts()) {
+        if (!customBoard.hasAnyQueensConflicts()) {
           var stringyCustom = JSON.stringify(customMatrix);
           solutions.push(stringyCustom);
         }
@@ -158,10 +154,7 @@ window.countNQueensSolutions = function(n) {
       //If customMatrix full check for conflicts
       if (customMatrix.length === n) {
         var customBoard = new Board(customMatrix);
-        if (!customBoard.hasAnyColConflicts() &&
-            !customBoard.hasAnyRowConflicts() &&
-            !customBoard.hasAnyMajorDiagonalConflicts() &&
-            !customBoard.hasAnyMinorDiagonalConflicts()) {
+        if (!customBoard.hasAnyQueensConflicts()) {
           var stringyCustom = JSON.stringify(customMatrix);
           solutions.push(stringyCustom);
         }
