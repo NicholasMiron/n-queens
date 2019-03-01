@@ -89,27 +89,43 @@ window.countNRooksSolutions = function(n) {
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
-  var solution = new Board(createMatrix(n)); //fixme
-  for (let row = 0; row < n; row++ ) {
-    for (let col = 0; col < n; col++) {
-      var aRow = solution.get(row);
-      aRow[col] = 1;
-      solution.set(row, aRow);
-      if (solution.hasAnyColConflicts() || 
-          solution.hasAnyRowConflicts() || 
-          solution.hasAnyMajorDiagonalConflicts() || 
-          solution.hasAnyMinorDiagonalConflicts()) {
-        aRow[col] = 0;
-        solution.set(row, aRow);
-      }
-    }
-  }
-  var output = [];
-  for (var i = 0; i < n; i++) {
-    output.push(solution.attributes[i]);
+  var solutions = [];
+
+  var preStuffed = createMatrix(n);
+  for (let i = 0; i < preStuffed.length; i++) {
+    preStuffed[i][i] = 1;
   }
 
-  console.log('Single solution for ' + n + ' queens:', JSON.stringify(output));
+  var valsToN = new Array(n);
+  for (var i = 0; i < n; i++) {
+    valsToN[i] = i;
+  }
+  var permutations = findAllPermutations(valsToN);
+
+  permutations.forEach(function(permute, permutationsIndex) {
+    var customMatrix = []; //a custom made matrix
+    permute.forEach(function(permi, permuteIndex) {
+      var indexForPreStuffed = permute[permuteIndex];
+      customMatrix[permuteIndex] = preStuffed[indexForPreStuffed];
+
+      if (customMatrix.length === n) {
+        var customBoard = new Board(customMatrix);
+        if (!customBoard.hasAnyColConflicts() &&
+            !customBoard.hasAnyRowConflicts() &&
+            !customBoard.hasAnyMajorDiagonalConflicts() &&
+            !customBoard.hasAnyMinorDiagonalConflicts()) {
+          var stringyCustom = JSON.stringify(customMatrix);
+          solutions.push(stringyCustom);
+        }
+      }
+    });
+  });
+  
+  var output = solutions.length > 0 ? JSON.parse(solutions[0]) : createMatrix(n);
+
+
+
+  console.log('Number of solutions for ' + n + ' queens:', output);
   return output;
 };
 
