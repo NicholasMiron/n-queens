@@ -118,7 +118,7 @@ window.findNQueensSolution = function(n) {
   }
   var output = solutions.length > 0 ? JSON.parse(solutions[0]) : createMatrix(n);
 
-  console.log('Number of solutions for ' + n + ' queens:', output);
+  console.log('Single solution for ' + n + ' queens:', JSON.stringify(output));
   return output;
 };
 
@@ -139,6 +139,10 @@ window.countNQueensSolutions = function(n) {
     valsToN[i] = i;
   }
   var permutations = findAllPermutations(valsToN);
+  // var stringPermutations = [];
+  // permutations.forEach(function(permute, index) {
+  //   stringPermutations[index] = JSON.stringify(permute);
+  // });
 
   //Go through all possiblities
   permutations.forEach(function(permute, permutationsIndex) {
@@ -154,6 +158,14 @@ window.countNQueensSolutions = function(n) {
         if (!customBoard.hasAnyQueensConflicts()) {
           var stringyCustom = JSON.stringify(customMatrix);
           solutions.push(stringyCustom);
+          // if (n > 1) {
+          //   var flippedMatrix = flipper(customMatrix);
+          //   var flippedStringy = JSON.stringify(stringyCustom);
+          //   solutions.push(stringyCustom);
+          //   var flippedPermute = JSON.stringify(flipper(permute));
+          //   var flippedIndexInPermutations = stringPermutations.indexOf(flippedPermute);
+          //   permutations.splice(flippedIndexInPermutations, 1);
+          // }
         }
       }
     });
@@ -162,6 +174,14 @@ window.countNQueensSolutions = function(n) {
 
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
+};
+
+window.flipper = function(matrix) {
+  var newMatrix = new Array(matrix.length);
+  for (var index = 0; index < matrix.length; index++) {
+    newMatrix[index] = matrix[matrix.length - 1 - index];
+  }
+  return newMatrix;
 };
 
 window.createMatrix = function(n) {
