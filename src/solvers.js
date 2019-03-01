@@ -101,25 +101,22 @@ window.findNQueensSolution = function(n) {
   }
   var permutations = findAllPermutations(valsToN);
 
-  permutations.forEach(function(permute, permutationsIndex) {
-    var customMatrix = []; //a custom made matrix
-    permute.forEach(function(permi, permuteIndex) {
-      var indexForPreStuffed = permute[permuteIndex];
+  AllValues: for (var permutationsIndex = 0; permutationsIndex < permutations.length; permutationsIndex++) {
+    var customMatrix = [];
+    for (var permuteIndex = 0; permuteIndex < permutations[permutationsIndex].length; permuteIndex++) {
+      var indexForPreStuffed = permutations[permutationsIndex][permuteIndex];
       customMatrix[permuteIndex] = preStuffed[indexForPreStuffed];
-
       if (customMatrix.length === n) {
         var customBoard = new Board(customMatrix);
         if (!customBoard.hasAnyQueensConflicts()) {
           var stringyCustom = JSON.stringify(customMatrix);
           solutions.push(stringyCustom);
+          break AllValues;
         }
       }
-    });
-  });
-  
+    }
+  }
   var output = solutions.length > 0 ? JSON.parse(solutions[0]) : createMatrix(n);
-
-
 
   console.log('Number of solutions for ' + n + ' queens:', output);
   return output;
